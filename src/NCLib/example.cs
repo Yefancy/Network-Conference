@@ -21,20 +21,11 @@ namespace NCLib
         }
     }
 
-    class example : IServerCallDatabase
+    /// <summary>
+    /// 假设这是对IServerCallDatabase接口的实现类
+    /// </summary>
+    public class example : IServerCallDatabase
     {
-        static void main()
-        {
-            example ex = new example();
-            Result result = ex.AddFriend("", "");
-            Console.WriteLine(result.BaseResult+result.Info);//能识别基本结果类的结果
-            Console.WriteLine((result as exResult).Num);//在知道结果类型下 查看强制转换后的特有结果信息
-
-            //输出结果:
-            //1失败啦
-            //23
-        }
-
         /// <summary>
         /// 实现该接口返回自定义结果
         /// </summary>

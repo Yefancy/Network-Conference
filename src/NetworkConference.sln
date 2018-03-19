@@ -5,6 +5,8 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCLib", "NCLib\NCLib.csproj", "{2807715D-6DE1-4C49-9215-E74A9BE4108E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NCLibExample", "NCLibExample\NCLibExample.csproj", "{157DBC58-1683-4669-B253-628F41780992}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{2807715D-6DE1-4C49-9215-E74A9BE4108E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2807715D-6DE1-4C49-9215-E74A9BE4108E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2807715D-6DE1-4C49-9215-E74A9BE4108E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{157DBC58-1683-4669-B253-628F41780992}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{157DBC58-1683-4669-B253-628F41780992}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{157DBC58-1683-4669-B253-628F41780992}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{157DBC58-1683-4669-B253-628F41780992}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
