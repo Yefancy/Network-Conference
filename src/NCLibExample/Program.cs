@@ -1,9 +1,6 @@
 ﻿using NCLib;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using static NCLibExample.Achieveinterface;
 
 namespace NCLibExample
 {
