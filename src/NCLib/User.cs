@@ -6,10 +6,7 @@ using System.Threading.Tasks;
 
 namespace NCLib
 {
-    /// <summary>
-    /// 用户类
-    /// </summary>
-    public class ClientUser
+    public class UserInfo
     {
         /// <summary>
         /// 用户ID唯一
@@ -19,6 +16,17 @@ namespace NCLib
         /// 用户昵称
         /// </summary>
         public string NickName;
+    }
+
+    /// <summary>
+    /// 客户端用户类
+    /// </summary>
+    public class ClientUser
+    {
+        /// <summary>
+        /// 用户信息
+        /// </summary>
+        public UserInfo UserInformation;
         /// <summary>
         /// 用户登录客户端IP
         /// </summary>

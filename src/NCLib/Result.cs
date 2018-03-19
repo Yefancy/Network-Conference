@@ -11,7 +11,14 @@ namespace NCLib
     /// </summary>
     public class Result
     {
+        /// <summary>
+        /// 基本结果
+        /// </summary>
         private baseResult _baseResult;
+        /// <summary>
+        /// 结果信息
+        /// </summary>
+        public string Info;
 
         /// <summary>
         /// 基本结果（只读）
@@ -28,9 +35,11 @@ namespace NCLib
         /// 结果的初始化（只能初始化一次 初始化后结果不能修改）
         /// </summary>
         /// <param name="baseResult">结果枚举</param>
-        public Result(baseResult baseResult)
+        /// <param name="info">结果信息</param>
+        public Result(baseResult baseResult, string info = null)
         {
             this._baseResult = baseResult;
+            this.Info = info;
         }
     }
 
