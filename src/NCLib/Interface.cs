@@ -168,7 +168,7 @@ namespace NCLib
         /// </summary>
         /// <param name="userId">用户ID</param>
         /// <returns>处理结果</returns>
-        Result GetUserFriend(string password);
+        Result GetUserFriends(string userId);
         /// <summary>
         /// 执行SQL结构化查询语句
         /// </summary>
