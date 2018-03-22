@@ -9,7 +9,7 @@ namespace NCLibExample
         static void Main(string[] args)
         {
             //对于负责别的模块的开发者来说并不知道IServerCallDatabase里面的实现 可以先引用这个接口
-            IServerCallDatabase ex = (new object())as IServerCallDatabase;
+            IServerCallDatabase ex;
             //当别人对这个接口实现后（例如在NCLib实现为example类）就能直接实例使用了
             ex = new example();
 
