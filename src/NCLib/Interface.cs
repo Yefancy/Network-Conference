@@ -163,6 +163,12 @@ namespace NCLib
         /// <param name="userId">用户ID</param>
         /// <param name="friendId">好友ID</param>
         void DeleteFriend(string userId, string friendId);
+		/// <summary>
+        /// 查找用户好友
+        /// </summary>
+        /// <param name="userId">用户ID</param>
+        /// <returns>处理结果</returns>
+        Result GetUserFriend(string password);
         /// <summary>
         /// 执行SQL结构化查询语句
         /// </summary>
