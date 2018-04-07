@@ -36,7 +36,7 @@ namespace NCLib
         /// </summary>
         /// <param name="baseResult">结果枚举</param>
         /// <param name="info">结果信息</param>
-        public Result(baseResult baseResult, string info = null)
+        public Result(baseResult baseResult, string info = "")
         {
             this._baseResult = baseResult;
             this.Info = info;

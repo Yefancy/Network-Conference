@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -163,7 +164,7 @@ namespace NCLib
         /// <param name="userId">用户ID</param>
         /// <param name="friendId">好友ID</param>
         void DeleteFriend(string userId, string friendId);
-		/// <summary>
+        /// <summary>
         /// 查找用户好友
         /// </summary>
         /// <param name="userId">用户ID</param>
@@ -187,24 +188,12 @@ namespace NCLib
         /// </summary>
         /// <param name="IP">IP</param>
         /// <param name="port">端口</param>
+        /// /// <param name="listen">监听数目(server) 本地端口(Client)</param>
         /// <param name="AccessAction">回调函数</param>
         /// <returns>处理结果</returns>
-        Result Access(string IP, int port, Action<string> accessAction);
+        Result Access(string IP, int port, int listen_or_port, Action<string> callBack = null);
         /// <summary>
-        /// 异步发送请求
-        /// </summary>
-        /// <param name="info">信息</param>
-        /// <param name="accessAction">回调函数</param>
-        /// <returns>发送结果</returns>
-        Result SendRequest(object info, Action<string> accessAction);
-        /// <summary>
-        /// 异步接受响应
-        /// </summary>
-        /// <param name="accessAction">回调函数</param>
-        /// <returns>处理结果</returns>
-        Result ReceiveRespond(Action<string> accessAction);
-        /// <summary>
-        /// 释放与指定Socket
+        /// 释放连接Socket
         /// </summary>
         /// <param name="key">字典字</param>
         void DisposeSocket(string key);
@@ -217,14 +206,50 @@ namespace NCLib
     }
 
     /// <summary>
-    /// Login/SignUp2Server通信API接口
+    /// Client通信API接口
     /// </summary>
-    public interface ILoginSignUP2Server : ISocketAPI
-    { }
+    public interface IClientSocket : ISocketAPI
+    {
+        /// <summary>
+        /// 异步发送请求(Client)
+        /// </summary>
+        /// <param name="info">信息</param>
+        /// <param name="callBack">回调函数</param>
+        /// <returns>发送结果</returns>
+        void SendRequest(string info, Action<string> callBack = null);
+        /// <summary>
+        /// 异步接受响应(Client)
+        /// </summary>
+        /// <param name="callBack">回调函数</param>
+        /// <returns>处理结果</returns>
+        void ReceiveRespond(Action<string> callBack = null);
+    }
 
     /// <summary>
-    /// MainForm2Server通信API接口
+    /// Server通信API接口
     /// </summary>
-    public interface IMainForm2Server : ISocketAPI
-    { }
+    public interface IServerSocket : ISocketAPI
+    {
+
+        /// <summary>
+        /// 异步发送响应(Server)
+        /// </summary>
+        /// <param name="info">信息</param>
+        /// <param name="callBack">回调函数</param>
+        /// <returns>发送结果</returns>
+        void SendRespond(string remoteEndPoint, string info, Action<string> callBack = null);
+        /// <summary>
+        /// 异步接受请求(Server)
+        /// </summary>
+        /// <param name="callBack">回调函数</param>
+        /// <returns>处理结果</returns>
+        void ReceiveRequest(string remoteEndPoint, ReceiveCallBack callBack = null);
+    }
+
+    /// <summary>
+    /// Server回调函数
+    /// </summary>
+    /// <param name="remoteEndPoint">请求的节点</param>
+    /// <param name="info">请求信息</param>
+    public delegate void ReceiveCallBack(string remoteEndPoint, string info);
 }
