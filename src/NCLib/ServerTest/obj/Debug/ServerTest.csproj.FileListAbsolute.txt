@@ -1,0 +1,10 @@
+G:\C#example\NetworkConference\ServerTest\bin\Debug\ServerTest.exe.config
+G:\C#example\NetworkConference\ServerTest\bin\Debug\ServerTest.exe
+G:\C#example\NetworkConference\ServerTest\bin\Debug\ServerTest.pdb
+G:\C#example\NetworkConference\ServerTest\bin\Debug\Client2Server.dll
+G:\C#example\NetworkConference\ServerTest\bin\Debug\NCLib.dll
+G:\C#example\NetworkConference\ServerTest\bin\Debug\Client2Server.pdb
+G:\C#example\NetworkConference\ServerTest\bin\Debug\NCLib.pdb
+G:\C#example\NetworkConference\ServerTest\obj\Debug\ServerTest.csprojResolveAssemblyReference.cache
+G:\C#example\NetworkConference\ServerTest\obj\Debug\ServerTest.exe
+G:\C#example\NetworkConference\ServerTest\obj\Debug\ServerTest.pdb

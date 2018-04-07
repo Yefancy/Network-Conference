@@ -1,0 +1,13 @@
+G:\C#example\ClassLibrary2\NCLib\bin\Debug\NCLib.dll
+G:\C#example\ClassLibrary2\NCLib\bin\Debug\NCLib.pdb
+G:\C#example\ClassLibrary2\NCLib\obj\Debug\NCLib.csprojResolveAssemblyReference.cache
+G:\C#example\ClassLibrary2\NCLib\obj\Debug\NCLib.dll
+G:\C#example\ClassLibrary2\NCLib\obj\Debug\NCLib.pdb
+C:\Users\Sion\Documents\GitHub\Network-Conference\src\NCLib\bin\Debug\NCLib.dll
+C:\Users\Sion\Documents\GitHub\Network-Conference\src\NCLib\bin\Debug\NCLib.pdb
+C:\Users\Sion\Documents\GitHub\Network-Conference\src\NCLib\obj\Debug\NCLib.dll
+C:\Users\Sion\Documents\GitHub\Network-Conference\src\NCLib\obj\Debug\NCLib.pdb
+G:\C#example\NetworkConference\NCLib\bin\Debug\NCLib.dll
+G:\C#example\NetworkConference\NCLib\bin\Debug\NCLib.pdb
+G:\C#example\NetworkConference\NCLib\obj\Debug\NCLib.dll
+G:\C#example\NetworkConference\NCLib\obj\Debug\NCLib.pdb
