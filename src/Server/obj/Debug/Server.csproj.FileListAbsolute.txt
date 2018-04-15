@@ -1,0 +1,12 @@
+G:\C#example\NetworkConference\Server\bin\Debug\Server.exe.config
+G:\C#example\NetworkConference\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+G:\C#example\NetworkConference\Server\bin\Debug\Server.exe
+G:\C#example\NetworkConference\Server\bin\Debug\Server.pdb
+G:\C#example\NetworkConference\Server\bin\Debug\Client2Server.dll
+G:\C#example\NetworkConference\Server\bin\Debug\NCLib.dll
+G:\C#example\NetworkConference\Server\bin\Debug\Server2DataBase.dll
+G:\C#example\NetworkConference\Server\bin\Debug\Client2Server.pdb
+G:\C#example\NetworkConference\Server\bin\Debug\NCLib.pdb
+G:\C#example\NetworkConference\Server\bin\Debug\Server2DataBase.pdb
+G:\C#example\NetworkConference\Server\obj\Debug\Server.exe
+G:\C#example\NetworkConference\Server\obj\Debug\Server.pdb

@@ -1,0 +1,10 @@
+G:\C#example\NetworkConference\DBTest\bin\Debug\DBTest.exe.config
+G:\C#example\NetworkConference\DBTest\bin\Debug\DBTest.exe
+G:\C#example\NetworkConference\DBTest\bin\Debug\DBTest.pdb
+G:\C#example\NetworkConference\DBTest\bin\Debug\NCLib.dll
+G:\C#example\NetworkConference\DBTest\bin\Debug\Server2DataBase.dll
+G:\C#example\NetworkConference\DBTest\bin\Debug\NCLib.pdb
+G:\C#example\NetworkConference\DBTest\bin\Debug\Server2DataBase.pdb
+G:\C#example\NetworkConference\DBTest\obj\Debug\DBTest.csprojResolveAssemblyReference.cache
+G:\C#example\NetworkConference\DBTest\obj\Debug\DBTest.exe
+G:\C#example\NetworkConference\DBTest\obj\Debug\DBTest.pdb

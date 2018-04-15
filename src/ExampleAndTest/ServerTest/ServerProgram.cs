@@ -22,7 +22,7 @@ namespace ServerTest
                 string cmd = Console.ReadLine();
                 if (cmd == "shutdown")
                     break;
-                ServerC.SendRespond(clients[0], "服务器发送信息:" + cmd);
+                ServerC.Send(clients[0], "服务器发送信息:" + cmd);
             }
         }
 
@@ -30,13 +30,13 @@ namespace ServerTest
         {
             Console.WriteLine("接收到来自:" + info + "连接请求");
             clients.Add(info);
-            ServerC.ReceiveRequest(info, Receive);
+            ServerC.Receive(info, Receive);
         }
 
         public static void Receive(string IP, string info)
         {
             Console.WriteLine("来自"+IP+"请求:"+info);
-            ServerC.SendRespond(IP, "服务器响应了你:" + info + "的请求");
+            ServerC.Send(IP, "服务器响应了你:" + info + "的请求");
         }
     }
 }

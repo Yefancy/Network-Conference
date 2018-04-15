@@ -1,0 +1,17 @@
+G:\C#example\NetworkConference\ServerTerminal\bin\Debug\ServerTerminal.exe.config
+G:\C#example\NetworkConference\ServerTerminal\bin\Debug\ServerTerminal.exe
+G:\C#example\NetworkConference\ServerTerminal\bin\Debug\ServerTerminal.pdb
+G:\C#example\NetworkConference\ServerTerminal\obj\Debug\ServerTerminal.csprojResolveAssemblyReference.cache
+G:\C#example\NetworkConference\ServerTerminal\obj\Debug\ServerTerminal.Form1.resources
+G:\C#example\NetworkConference\ServerTerminal\obj\Debug\ServerTerminal.Properties.Resources.resources
+G:\C#example\NetworkConference\ServerTerminal\obj\Debug\ServerTerminal.csproj.GenerateResource.Cache
+G:\C#example\NetworkConference\ServerTerminal\obj\Debug\ServerTerminal.exe
+G:\C#example\NetworkConference\ServerTerminal\obj\Debug\ServerTerminal.pdb
+G:\C#example\NetworkConference\ServerTerminal\bin\Debug\Server.exe
+G:\C#example\NetworkConference\ServerTerminal\bin\Debug\NCLib.dll
+G:\C#example\NetworkConference\ServerTerminal\bin\Debug\Client2Server.dll
+G:\C#example\NetworkConference\ServerTerminal\bin\Debug\Server2DataBase.dll
+G:\C#example\NetworkConference\ServerTerminal\bin\Debug\Server.pdb
+G:\C#example\NetworkConference\ServerTerminal\bin\Debug\NCLib.pdb
+G:\C#example\NetworkConference\ServerTerminal\bin\Debug\Client2Server.pdb
+G:\C#example\NetworkConference\ServerTerminal\bin\Debug\Server2DataBase.pdb

@@ -11,3 +11,4 @@ G:\C#example\NetworkConference\NCLib\bin\Debug\NCLib.dll
 G:\C#example\NetworkConference\NCLib\bin\Debug\NCLib.pdb
 G:\C#example\NetworkConference\NCLib\obj\Debug\NCLib.dll
 G:\C#example\NetworkConference\NCLib\obj\Debug\NCLib.pdb
+G:\C#example\NetworkConference\NCLib\obj\Debug\NCLib.csprojResolveAssemblyReference.cache

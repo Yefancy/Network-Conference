@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Client2Server
 {
-    public class SocketAPI : ISocketAPI
+    public abstract class SocketAPI : ISocketAPI
     {
         /// <summary>
         /// 定义的通信Socket
@@ -22,10 +22,7 @@ namespace Client2Server
         /// <param name="port">端口</param>
         /// <param name="callBack">回调函数</param>
         /// <returns>结果</returns>
-        public virtual Result Access(string IP, int port, int listen_or_port, Action<string> callBack = null)
-        {
-            throw new NotImplementedException();
-        }
+        public abstract Result Access(string IP, int port, int listen_or_port, Action<string> callBack = null);
 
         /// <summary>
         /// 释放socket资源
@@ -33,7 +30,6 @@ namespace Client2Server
         /// <param name="key"></param>
         public void DisposeSocket(string key)
         {
-            communicateSocket.Disconnect(false);
             communicateSocket.Close();
         }
 

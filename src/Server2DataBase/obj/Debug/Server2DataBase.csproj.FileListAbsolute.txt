@@ -1,0 +1,7 @@
+G:\C#example\NetworkConference\Server2DataBase\bin\Debug\Server2DataBase.dll
+G:\C#example\NetworkConference\Server2DataBase\bin\Debug\Server2DataBase.pdb
+G:\C#example\NetworkConference\Server2DataBase\bin\Debug\NCLib.dll
+G:\C#example\NetworkConference\Server2DataBase\bin\Debug\NCLib.pdb
+G:\C#example\NetworkConference\Server2DataBase\obj\Debug\Server2DataBase.csprojResolveAssemblyReference.cache
+G:\C#example\NetworkConference\Server2DataBase\obj\Debug\Server2DataBase.dll
+G:\C#example\NetworkConference\Server2DataBase\obj\Debug\Server2DataBase.pdb

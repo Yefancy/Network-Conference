@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -68,22 +69,22 @@ namespace NCLib
         /// <param name="userInfo">用户信息</param>
         /// <param name="friendId">好友Id</param>
         /// <returns>处理结果</returns>
-        Result AddFriendRequest(ClientUser userInfo, string friendId);
+        //Result AddFriendRequest(ClientUser userInfo, string friendId);
         /// <summary>
         /// 处理删除好友请求
         /// </summary>
         /// <param name="userInfo">用户信息</param>
         /// <param name="friendId">好友ID</param>
         /// <returns>处理结果</returns>
-        Result DeleteFriendRequest(ClientUser userInfo, string friendId);
+        //Result DeleteFriendRequest(ClientUser userInfo, string friendId);
         /// <summary>
-        /// 处理创建房间请求
+        /// 处理创建答疑室请求
         /// </summary>
         /// <param name="userInfo">用户信息</param>
         /// <returns>处理结果</returns>
         Result CreateRoomRequest(ClientUser userInfo);
         /// <summary>
-        /// 处理加入房间请求
+        /// 处理加入答疑室请求
         /// </summary>
         /// <param name="userInfo">用户信息</param>
         /// <param name="roomId">房间ID</param>
@@ -97,17 +98,18 @@ namespace NCLib
         /// <param name="friendId">好友ID</param>
         /// <param name="roomId">房间ID</param>
         /// <returns>处理结果</returns>
-        Result InviteFriendRequest(ClientUser userInfo, string friendId, string roomId);
+        //Result InviteFriendRequest(ClientUser userInfo, string friendId, string roomId);
         /// <summary>
-        /// 处理静音某人请求
+        /// 设置某人语音权限请求
         /// </summary>
         /// <param name="userInfo">用户信息</param>
         /// <param name="friendId">好友ID</param>
         /// <param name="roomId">房间ID</param>
+        /// /// <param name="mute">是否静音</param>
         /// <returns></returns>
-        Result MuteToUserRequest(ClientUser userInfo, string friendId, string roomId);
+        Result MuteToUserRequest(ClientUser userInfo, string friendId, string roomId, bool mute);
         /// <summary>
-        /// 处理获取房间用户表请求
+        /// 处理获取答疑室用户表请求
         /// </summary>
         /// <param name="userInfo">用户信息</param>
         /// <param name="roomId">房间ID</param>
@@ -118,7 +120,7 @@ namespace NCLib
         /// </summary>
         /// <param name="userInfo">用户信息</param>
         /// <returns>处理结果</returns>
-        Result GetFriendsListInRoomRequest(ClientUser userInfo);
+        //Result GetFriendsListInRoomRequest(ClientUser userInfo);
     }
 
     /// <summary>
@@ -127,13 +129,21 @@ namespace NCLib
     public interface IServerCallDatabase
     {
         /// <summary>
+        /// SQL执行结果（只读）
+        /// </summary>
+        DataSet TmpDataSet
+        {
+            get;
+        }
+        /// <summary>
         /// 连接数据库
         /// </summary>
         /// <param name="user">数据库账号</param>
         /// <param name="password">密码</param>
         /// <param name="url">数据库地址</param>
+        /// <param name="database">数据库名称</param>
         /// <returns>链接结果</returns>
-        Result ConnectDatabase(string user, string password, string url);
+        Result ConnectDatabase(string user, string password, string url, string database);
         /// <summary>
         /// 断开数据库连接
         /// </summary>
@@ -147,6 +157,19 @@ namespace NCLib
         /// <returns>处理结果</returns>
         Result AddUser(UserInfo info, string password);
         /// <summary>
+        /// 验证用户信息
+        /// </summary>
+        /// <param name="info">信息</param>
+        /// <param name="password">密码</param>
+        /// <returns>结果</returns>
+        Result CheckUserInfo(UserInfo info, string password);
+        /// <summary>
+        /// 是否特权用户
+        /// </summary>
+        /// <param name="info">用户信息</param>
+        /// <returns>结果</returns>
+        bool IsPrerogative(UserInfo info);
+        /// <summary>
         /// 删除用户
         /// </summary>
         /// <param name="userId">用户ID</param>
@@ -157,25 +180,26 @@ namespace NCLib
         /// <param name="userId">用户ID</param>
         /// <param name="friendId">好友ID</param>
         /// <returns>调用结果</returns>
-        Result AddFriend(string userId, string friendId);
+        //Result AddFriend(string userId, string friendId);
         /// <summary>
         /// 删除关联好友
         /// </summary>
         /// <param name="userId">用户ID</param>
         /// <param name="friendId">好友ID</param>
-        void DeleteFriend(string userId, string friendId);
+        //void DeleteFriend(string userId, string friendId);
         /// <summary>
         /// 查找用户好友
         /// </summary>
         /// <param name="userId">用户ID</param>
         /// <returns>处理结果</returns>
-        Result GetUserFriends(string userId);
+        //Result GetUserFriends(string userId);
         /// <summary>
         /// 执行SQL结构化查询语句
         /// </summary>
         /// <param name="sql">结构化查询语句</param>
+        /// <param name="tableTitle">结果标题</param>
         /// <returns>执行结果</returns>
-        Result ExecuteStructuredQueryLanguage(string sql);
+        Result ExecuteStructuredQueryLanguage(string sql, string tableTitle);
     }
 
     /// <summary>
@@ -216,13 +240,13 @@ namespace NCLib
         /// <param name="info">信息</param>
         /// <param name="callBack">回调函数</param>
         /// <returns>发送结果</returns>
-        void SendRequest(string info, Action<string> callBack = null);
+        void Send(string info, Action<string> callBack = null);
         /// <summary>
         /// 异步接受响应(Client)
         /// </summary>
         /// <param name="callBack">回调函数</param>
         /// <returns>处理结果</returns>
-        void ReceiveRespond(Action<string> callBack = null);
+        void Receive(Action<string> callBack = null);
     }
 
     /// <summary>
@@ -237,13 +261,17 @@ namespace NCLib
         /// <param name="info">信息</param>
         /// <param name="callBack">回调函数</param>
         /// <returns>发送结果</returns>
-        void SendRespond(string remoteEndPoint, string info, Action<string> callBack = null);
+        void Send(string remoteEndPoint, string info, Action<string> callBack = null);
         /// <summary>
         /// 异步接受请求(Server)
         /// </summary>
         /// <param name="callBack">回调函数</param>
         /// <returns>处理结果</returns>
-        void ReceiveRequest(string remoteEndPoint, ReceiveCallBack callBack = null);
+        void Receive(string remoteEndPoint, ReceiveCallBack callBack = null);
+        /// <summary>
+        /// 客户端断线事件
+        /// </summary>
+        event Action<string> OnClientOffline;
     }
 
     /// <summary>

@@ -16,25 +16,26 @@ namespace NCLib
         /// 用户昵称
         /// </summary>
         public string NickName;
+        /// <summary>
+        /// 特权用户
+        /// </summary>
+        public bool IsPrerogative;
+
+        public UserInfo(string id = null)
+        {
+            UserId = id;
+        }
     }
 
     /// <summary>
     /// 客户端用户类
     /// </summary>
-    public class ClientUser
+    public class ClientUser: UserInfo
     {
         /// <summary>
-        /// 用户信息
+        /// 用户网络端点(IP:port)
         /// </summary>
-        public UserInfo UserInformation;
-        /// <summary>
-        /// 用户登录客户端IP
-        /// </summary>
-        public string IP;
-        /// <summary>
-        /// 用户客户端端口
-        /// </summary>
-        public int Port; 
+        public string remoteEndPoint;
         /// <summary>
         /// 用户账号当前状态
         /// </summary>

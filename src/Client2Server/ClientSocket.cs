@@ -54,7 +54,7 @@ namespace Client2Server
         /// <param name="info">信息</param>
         /// <param name="callBack">回调函数</param>
         /// <returns>发送结果</returns>
-        public void SendRequest(string info, Action<string> callBack = null)
+        public void Send(string info, Action<string> callBack = null)
         {
             if (base.communicateSocket.Connected == false)
             {
@@ -77,7 +77,7 @@ namespace Client2Server
         /// </summary>
         /// <param name="callBack">回调函数</param>
         /// <returns>处理结果</returns>
-        public void ReceiveRespond(Action<string> callBack = null)
+        public void Receive(Action<string> callBack = null)
         {
             Byte[] msg = new byte[1024];
             //异步的接受消息
@@ -92,7 +92,7 @@ namespace Client2Server
                         //还原字符串
                         if(callBack!=null)
                         callBack(Encoding.UTF8.GetString(msg).Trim('\0', ' '));
-                        ReceiveRespond(callBack);
+                        Receive(callBack);
                     }
                     catch (Exception e)
                     {

@@ -15,6 +15,7 @@ namespace Client2Server
         /// TValue:套接字
         /// </summary>
         public Dictionary<string, Socket> clientConnections = new Dictionary<string, Socket>();
+        public event Action<string> OnClientOffline;
 
         /// <summary>
         /// 重写服务端Access函数
@@ -51,12 +52,19 @@ namespace Client2Server
         {
             base.communicateSocket.BeginAccept(ar =>
             {
-                Socket connection = base.communicateSocket.EndAccept(ar);
-                string remoteEndPoint = connection.RemoteEndPoint.ToString();
-                clientConnections.Add(remoteEndPoint, connection);
-                if (callBack != null)
-                    callBack(remoteEndPoint);
-                StartAccept(callBack);
+                try
+                {
+                    Socket connection = base.communicateSocket.EndAccept(ar);
+                    string remoteEndPoint = connection.RemoteEndPoint.ToString();
+                    clientConnections.Add(remoteEndPoint, connection);
+                    if (callBack != null)
+                        callBack(remoteEndPoint);
+                    StartAccept(callBack);
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }, null);
         }
 
@@ -66,7 +74,7 @@ namespace Client2Server
         /// <param name="info">信息</param>
         /// <param name="callBack">回调函数</param>
         /// <returns>发送结果</returns>
-        public void SendRespond(string remoteEndPoint, string info, Action<string> callBack = null)
+        public void Send(string remoteEndPoint, string info, Action<string> callBack = null)
         {
             //是否存在连接
             if (!clientConnections.ContainsKey(remoteEndPoint))
@@ -95,7 +103,7 @@ namespace Client2Server
         /// </summary>
         /// <param name="callBack">回调函数</param>
         /// <returns>处理结果</returns>
-        public void ReceiveRequest(string remoteEndPoint, ReceiveCallBack callBack = null)
+        public void Receive(string remoteEndPoint, ReceiveCallBack callBack = null)
         {
             Byte[] msg = new byte[1024];
             //异步的接受消息
@@ -111,15 +119,15 @@ namespace Client2Server
                         //还原字符串
                         if (callBack != null)
                             callBack(cSocket.RemoteEndPoint.ToString(), Encoding.UTF8.GetString(msg).Trim('\0', ' '));
-                        ReceiveRequest(remoteEndPoint, callBack);
+                        Receive(remoteEndPoint, callBack);
                     }
                     catch (Exception e)
                     {
-                        //cSocket.EndReceive(ar);
                         Console.WriteLine(e.Message);
                         //对于连接断开的异常 移除维持的Socket
-                        clientConnections.Remove(remoteEndPoint.ToString());
+                        clientConnections.Remove(remoteEndPoint);
                         cSocket.Close();
+                        OnClientOffline(remoteEndPoint);
                         Console.WriteLine("释放与" + remoteEndPoint + "的连接资源");
                     }
                 }, null);
