@@ -1,0 +1,13 @@
+G:\C#example\NetworkConference\Client\obj\Debug\Client.csprojResolveAssemblyReference.cache
+G:\C#example\NetworkConference\Client\bin\Debug\Client.dll
+G:\C#example\NetworkConference\Client\bin\Debug\Client.pdb
+G:\C#example\NetworkConference\Client\bin\Debug\Client2Server.dll
+G:\C#example\NetworkConference\Client\bin\Debug\ESBasic.dll
+G:\C#example\NetworkConference\Client\bin\Debug\NCLib.dll
+G:\C#example\NetworkConference\Client\bin\Debug\OMCS.dll
+G:\C#example\NetworkConference\Client\bin\Debug\Client2Server.pdb
+G:\C#example\NetworkConference\Client\bin\Debug\NCLib.pdb
+G:\C#example\NetworkConference\Client\bin\Debug\ESBasic.xml
+G:\C#example\NetworkConference\Client\bin\Debug\OMCS.xml
+G:\C#example\NetworkConference\Client\obj\Debug\Client.dll
+G:\C#example\NetworkConference\Client\obj\Debug\Client.pdb

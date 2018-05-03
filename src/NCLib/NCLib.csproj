@@ -40,9 +40,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Result\NCAsyncResult.cs" />
+    <Compile Include="NCEnum.cs" />
     <Compile Include="User.cs" />
     <Compile Include="Interface.cs" />
-    <Compile Include="Result.cs" />
+    <Compile Include="Result\Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

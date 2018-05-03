@@ -25,7 +25,7 @@ namespace Client2Server
         /// <param name="listen"></param>
         /// <param name="callBack"></param>
         /// <returns></returns>
-        public override Result Access(string IP, int port, int listen, Action<string> callBack = null)
+        public override IResult Access(string IP, int port, int listen, Action<string> callBack = null)
         {
             base.communicateSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             //接入使用的IP和端口
@@ -61,7 +61,7 @@ namespace Client2Server
                         callBack(remoteEndPoint);
                     StartAccept(callBack);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Console.WriteLine(e.Message);
                 }
@@ -127,7 +127,8 @@ namespace Client2Server
                         //对于连接断开的异常 移除维持的Socket
                         clientConnections.Remove(remoteEndPoint);
                         cSocket.Close();
-                        OnClientOffline(remoteEndPoint);
+                        if (OnClientOffline != null)
+                            OnClientOffline(remoteEndPoint);
                         Console.WriteLine("释放与" + remoteEndPoint + "的连接资源");
                     }
                 }, null);

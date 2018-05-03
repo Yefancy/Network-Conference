@@ -80,6 +80,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NCLib\NCLib.csproj">
+      <Project>{2807715D-6DE1-4C49-9215-E74A9BE4108E}</Project>
+      <Name>NCLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Server\Server.csproj">
       <Project>{9457e594-df82-4e90-9284-4b6a59acb2cd}</Project>
       <Name>Server</Name>

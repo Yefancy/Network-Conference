@@ -12,7 +12,7 @@ namespace Server
     {
         static void Main(string[] args)
         {
-            Terminal.OnNewMessageCome += (title,info,color) => { Console.WriteLine(title+info); };
+            Terminal.OnNewMessagePrint += (title,info,color) => { Console.WriteLine(title+info); };
             Server server = new Server("127.0.0.1", 9840, "sa", "1213141516", "127.0.0.1", "NCDB");
             server.Init();
             //server.Close();

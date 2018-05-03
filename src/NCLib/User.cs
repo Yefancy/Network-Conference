@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NCLib
 {
-    public class UserInfo
+    public abstract class UserInfo
     {
         /// <summary>
         /// 用户ID唯一
@@ -28,7 +28,7 @@ namespace NCLib
     }
 
     /// <summary>
-    /// 客户端用户类
+    /// 用户类
     /// </summary>
     public class ClientUser: UserInfo
     {
@@ -39,15 +39,13 @@ namespace NCLib
         /// <summary>
         /// 用户账号当前状态
         /// </summary>
-        public State UserState;
+        public UserState UserState;
+
+        public ClientUser(string id = null):base(id)
+        {
+            UserState = UserState.未登录;
+        }
     }
 
-    /// <summary>
-    /// 用户当前状态
-    /// </summary>
-    public enum State
-    {
-        Online,
-        Offline
-    }
+   
 }

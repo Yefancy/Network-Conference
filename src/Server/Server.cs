@@ -9,7 +9,10 @@ using System.Threading.Tasks;
 
 namespace Server
 {
-    public class Server : IServerLogic
+    /// <summary>
+    /// 服务端
+    /// </summary>
+    public class Server : IServer
     {
         /// <summary>
         /// 数据库
@@ -24,20 +27,19 @@ namespace Server
         /// </summary>
         private Dictionary<string, UserInfo> Clients_remoteEndPoint;
         /// <summary>
-        /// 学号对用户字典（记录登录中的账号）
+        /// 学号对端点字典（记录登录中的账号）
         /// </summary>
-        private Dictionary<string, UserInfo> Clients_id;
+        private Dictionary<string, string> Clients_id;
         private string ip, user, password, url, database;
         private int port;
         private ServerState _isInit = ServerState.未初始化;
-
+        
         public ServerState IsInit
         {
             get
             {
                 return _isInit;
             }
-
         }
 
         public Server(string IP, int port, string user, string password, string url, string database)
@@ -46,7 +48,7 @@ namespace Server
             ServerSocket = new ServerSocket();
             ServerSocket.OnClientOffline += ClientOffline;
             Clients_remoteEndPoint = new Dictionary<string, UserInfo>();
-            Clients_id = new Dictionary<string, UserInfo>();
+            Clients_id = new Dictionary<string, string>();
             this.ip = IP;
             this.port = port;
             this.user = user;
@@ -75,7 +77,7 @@ namespace Server
                 Terminal.SetServerTitle(this.ip, this.port);
                 Terminal.ServerPrint(InfoType.信息, "服务器初始化中...");
                 Terminal.ServerPrint(InfoType.信息, "连接数据库");
-                Result result = ServerCallDatabase.ConnectDatabase(this.user, this.password, this.url, this.database);
+                IResult result = ServerCallDatabase.ConnectDatabase(this.user, this.password, this.url, this.database);
                 if (result.BaseResult == baseResult.Faild)
                 {
                     Terminal.ServerPrint(InfoType.信息, "初始化失败 原因:" + result.Info);
@@ -113,48 +115,68 @@ namespace Server
         }
 
         #region 业务逻辑
-        public Result CreateRoomRequest(ClientUser userInfo)
+        private void CreateRoomRequest(Dictionary<string, string> message, string remoteEndPoint, ClientUser userInfo)
         {
             throw new NotImplementedException();
         }
 
-        public Result GetUserListInRoomRequest(ClientUser userInfo, string roomId)
+        private void GetUserListInRoomRequest(Dictionary<string, string> message, string remoteEndPoint, ClientUser userInfo, string roomId)
         {
             throw new NotImplementedException();
         }
 
-        public Result JoinRoomRequest(ClientUser userInfo, string roomId, string password = null)
+        private void JoinRoomRequest(Dictionary<string, string> message, string remoteEndPoint, ClientUser userInfo, string roomId, string password = null)
         {
             throw new NotImplementedException();
         }
 
-        public Result LoginRequest(UserInfo userInfo, string password)
+        private void LoginRequest(Dictionary<string, string> message, string remoteEndPoint, UserInfo userInfo, string password)
         {
+            Terminal.ClientPrint(remoteEndPoint, InfoType.请求, "登录客户端=>学号:" + message["学号"]);
+            //之前的ID；
+            string lastUserId = userInfo.UserId==null? "":userInfo.UserId;
+            userInfo.UserId = message["学号"];
+            Result result;
             //判断是否已登录
             if (Clients_id.ContainsKey(userInfo.UserId))
-                return new Result(baseResult.Faild, "该用户已登录");
-            Terminal.ServerPrint(InfoType.信息, "访问数据库中......");
-            //验证结果
-            bool result = (ServerCallDatabase.CheckUserInfo(userInfo, password).BaseResult
-                            == baseResult.Successful) ? true : false;
-            bool IsPrerogative;
-            if (result)
+                result = new Result(baseResult.Faild, "该用户已登录");
+            else
             {
-                //是否权限用户
-                IsPrerogative = ServerCallDatabase.IsPrerogative(userInfo);
-                userInfo.IsPrerogative = IsPrerogative;
-                Clients_id[userInfo.UserId] = userInfo;
-                return new Result(baseResult.Successful, IsPrerogative.ToString());
+                Terminal.ServerPrint(InfoType.信息, "访问数据库中......");
+                //验证结果
+                if (ServerCallDatabase.CheckUserInfo(userInfo, password).BaseResult == baseResult.Successful)
+                {
+                    //是否权限用户
+                    bool IsPrerogative = ServerCallDatabase.IsPrerogative(userInfo);
+                    userInfo.IsPrerogative = IsPrerogative;
+                    //已登录了 移除登陆
+                    if(Clients_id.ContainsKey(lastUserId))
+                        Clients_id.Remove(lastUserId);
+                    Clients_id[userInfo.UserId] = remoteEndPoint;
+                    result = new Result(baseResult.Successful, IsPrerogative.ToString());
+                }
+                else
+                    result = new Result(baseResult.Faild, "错误的账号或密码");
             }
-            return new Result(baseResult.Faild, "错误的账号或密码");
+
+            if (result.BaseResult == baseResult.Successful)
+            {
+                Terminal.ServerPrint(InfoType.响应, "<" + remoteEndPoint + ">:" + "成功登录 权限:" + result.Info);
+                ServerSocket.Send(remoteEndPoint, MessageTranslate.EncapsulationInfo(MessageContent.登录, MessageType.响应, result.BaseResult.ToString(), result.Info));
+            }
+            else
+            {
+                Terminal.ServerPrint(InfoType.响应, "<" + remoteEndPoint + ">:" + "登录失败 原因:" + result.Info);
+                ServerSocket.Send(remoteEndPoint, MessageTranslate.EncapsulationInfo(MessageContent.登录, MessageType.响应, result.BaseResult.ToString(), result.Info));
+            }
         }
 
-        public Result MuteToUserRequest(ClientUser userInfo, string friendId, string roomId, bool mute)
+        private void MuteToUserRequest(Dictionary<string, string> message, string remoteEndPoint, ClientUser userInfo, string friendId, string roomId, bool mute)
         {
             throw new NotImplementedException();
         }
 
-        public Result RegisterRequest(UserInfo userInfo, string password)
+        private void RegisterRequest(Dictionary<string, string> message, string remoteEndPoint, UserInfo userInfo, string password)
         {
             throw new NotImplementedException();
         }
@@ -182,22 +204,7 @@ namespace Server
                 case MessageContent.登录:
                     if (messageType == MessageType.请求)
                     {
-                        #region 登录请求
-                        Terminal.ClientPrint(remoteEndPoint, InfoType.请求, "登录客户端=>学号:" + message["学号"]);
-                        UserInfo user = Clients_remoteEndPoint[remoteEndPoint];
-                        user.UserId = message["学号"];
-                        Result result = LoginRequest(user, message["密码"]);
-                        if (result.BaseResult == baseResult.Successful)
-                        {
-                            Terminal.ServerPrint(InfoType.响应, "<" + remoteEndPoint + ">:" + "成功登录 权限:" + result.Info);
-                            ServerSocket.Send(remoteEndPoint, MessageTranslate.EncapsulationInfo(MessageContent.登录, MessageType.响应, result.BaseResult.ToString(), result.Info));
-                        }
-                        else
-                        {
-                            Terminal.ServerPrint(InfoType.响应, "<" + remoteEndPoint + ">:" + "登录失败 原因:" + result.Info);
-                            ServerSocket.Send(remoteEndPoint, MessageTranslate.EncapsulationInfo(MessageContent.登录, MessageType.响应, result.BaseResult.ToString(), result.Info));
-                        }
-                        #endregion
+                        LoginRequest(message, remoteEndPoint, Clients_remoteEndPoint[remoteEndPoint], message["密码"]);
                     }
                     else if (messageType == MessageType.响应)
                     {
@@ -216,23 +223,15 @@ namespace Server
         private void ClientOffline(string remoteEndPoint)
         {
             Terminal.ServerPrint(InfoType.信息, "客户端<" + remoteEndPoint + ">断开了连接。服务器释放通信连接");
+            string id = "";
             if (Clients_remoteEndPoint.ContainsKey(remoteEndPoint))
+            {
+                id = Clients_remoteEndPoint[remoteEndPoint].UserId;
                 Clients_remoteEndPoint.Remove(remoteEndPoint);
-            if (Clients_id.ContainsKey(remoteEndPoint))
-                Clients_id.Remove(remoteEndPoint);
+            }
+            if (Clients_id.ContainsKey(id))
+                Clients_id.Remove(id);
         }
         #endregion
     }
-
-    /// <summary>
-    /// 服务器状态
-    /// </summary>
-    public enum ServerState
-    {
-        未初始化,
-        初始化中,
-        初始化完成,
-        关闭
-    }
-
 }

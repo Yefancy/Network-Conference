@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Class1.cs" />
     <Compile Include="ClientProgram.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -53,6 +54,10 @@
     <ProjectReference Include="..\Client2Server\Client2Server.csproj">
       <Project>{98f43570-d087-4a20-84b2-2b7ee24d1c06}</Project>
       <Name>Client2Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Client\Client.csproj">
+      <Project>{6e8a8d25-0b87-4b4b-a6e9-1ed6e1dba932}</Project>
+      <Name>Client</Name>
     </ProjectReference>
     <ProjectReference Include="..\NCLib\NCLib.csproj">
       <Project>{2807715d-6de1-4c49-9215-e74a9be4108e}</Project>

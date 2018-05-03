@@ -89,8 +89,8 @@ namespace Client2Server
             }
             else
             {
-                messageContent = String2MessageContent(words[1]);
-                messageType = String2MessageType(words[2]);
+                messageContent = NCEnum.String2Enum<MessageContent>(words[1]);
+                messageType = NCEnum.String2Enum<MessageType>(words[2]);
                 for (int i = 3; i < words.Length-1; i = i + 2)
                 {
                     dic[words[i]] = words[i+1];
@@ -98,45 +98,5 @@ namespace Client2Server
             }
             return dic;
         }
-
-        /// <summary>
-        /// string转MessageContent
-        /// </summary>
-        /// <param name="ins"></param>
-        /// <returns></returns>
-        public static MessageContent String2MessageContent(string ins)
-        {
-            return (MessageContent)Enum.Parse(typeof(MessageContent), ins);
-        }
-
-        /// <summary>
-        /// string转MessageType
-        /// </summary>
-        /// <param name="ins"></param>
-        /// <returns></returns>
-        public static MessageType String2MessageType(string ins)
-        {
-            return (MessageType)Enum.Parse(typeof(MessageType), ins);
-        }
-    }
-
-    /// <summary>
-    /// 消息内容
-    /// </summary>
-    public enum MessageContent
-    {
-        错误,
-        登录
-    }
-
-    /// <summary>
-    /// 消息类型
-    /// </summary>
-    public enum MessageType
-    {
-        错误,
-        请求,
-        响应,
-        消息
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NCLib;
 using System.Net.Sockets;
 using System.Net;
+using System.Threading;
 
 namespace Client2Server
 {
@@ -19,7 +20,7 @@ namespace Client2Server
         /// <param name="listen"></param>
         /// <param name="callBack"></param>
         /// <returns></returns>
-        public override Result Access(string IP, int port, int blindport, Action<string> callBack = null)
+        public override IResult Access(string IP, int port, int blindport, Action<string> callBack = null)
         {
             base.communicateSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             base.communicateSocket.Bind(new IPEndPoint(IPAddress.Any, blindport));
@@ -45,7 +46,7 @@ namespace Client2Server
             {
                 throw new Exception(string.Format("尝试连接{0}不成功!", IP));
             }
-            return new Result(baseResult.Successful, "客户端请求到Socket(IP:" + IP + "PORT:" + port + ")\n");
+            return new Result(baseResult.Successful, "客户端请求连接Socket(IP:" + IP + "PORT:" + port + ")中..\n");
         }
 
         /// <summary>

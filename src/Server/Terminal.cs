@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NCLib;
 
 namespace Server
 {
@@ -18,7 +19,7 @@ namespace Server
         /// <summary>
         /// 新消息到来事件
         /// </summary>
-        public static event NewMessageComeEventHandler OnNewMessageCome;
+        public static event NewMessagePrintEventHandler OnNewMessagePrint;
         #endregion
 
         #region 消息打印
@@ -38,7 +39,7 @@ namespace Server
         /// <param name="info"></param>
         public static void OriginPrint(string info)
         {
-            OnNewMessageCome("", info);
+            OnNewMessagePrint("", info);
         }
 
         /// <summary>
@@ -48,7 +49,7 @@ namespace Server
         /// <param name="info"></param>
         public static void ServerPrint(InfoType type, string info)
         {
-            OnNewMessageCome(String.Format(ServerTitle, type), info, Color.Green);
+            OnNewMessagePrint(String.Format(ServerTitle, type), info, Color.Green);
         }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace Server
         /// <param name="info"></param>
         public static void ClientPrint(string remoteEndPoint, InfoType type, string info)
         {
-            OnNewMessageCome(String.Format(ClientTitle, remoteEndPoint, type), info, Color.Blue);
+            OnNewMessagePrint(String.Format(ClientTitle, remoteEndPoint, type), info, Color.Blue);
         }
         #endregion
 
@@ -75,17 +76,5 @@ namespace Server
     /// <param name="title">标题</param>
     /// <param name="message">信息</param>
     /// <param name="color">打印颜色</param>
-    public delegate void NewMessageComeEventHandler(string title, string message, Color color = new Color());
-
-
-    /// <summary>
-    /// 消息类型
-    /// </summary>
-    public enum InfoType
-    {
-        信息,
-        请求,
-        响应,
-        发送,
-    }
+    public delegate void NewMessagePrintEventHandler(string title, string message, Color color = new Color());
 }

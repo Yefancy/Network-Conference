@@ -1,4 +1,5 @@
-﻿using Server;
+﻿using NCLib;
+using Server;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,7 +18,7 @@ namespace ServerTerminal
         Server.Server myServer;
         public Form1()
         {
-            Terminal.OnNewMessageCome += print;
+            Terminal.OnNewMessagePrint += print;
             myServer = new Server.Server("127.0.0.1", 9840, "sa", "1213141516", "127.0.0.1", "NCDB");
             InitializeComponent();
         }
@@ -34,7 +35,7 @@ namespace ServerTerminal
         /// <param name="ins"></param>
         private void print(string title, string ins, Color color = new Color())
         {
-            OutputBox.Invoke(new NewMessageComeEventHandler
+            OutputBox.Invoke(new NewMessagePrintEventHandler
                 ( ( _title,  _ins,  _color) =>
                     {
                         if (_color == Color.Empty)

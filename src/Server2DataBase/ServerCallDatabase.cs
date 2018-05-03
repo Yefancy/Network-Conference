@@ -64,13 +64,13 @@ namespace Server2DataBase
         /// <param name="userId">用户ID</param>
         /// <param name="password">密码</param>
         /// <returns>处理结果</returns>
-        public Result AddUser(UserInfo info, string password)
+        public IResult AddUser(UserInfo info, string password)
         {
             if (IsExist(info))
                 return new Result(baseResult.Faild, "已存在用户");
             else
             {
-                Result tmpResult = ExecuteStructuredQueryLanguage(String.Format(addUser, info.UserId, info.NickName, password), "AddUser");
+                IResult tmpResult = ExecuteStructuredQueryLanguage(String.Format(addUser, info.UserId, info.NickName, password), "AddUser");
                 if (tmpResult.BaseResult == baseResult.Faild)
                     return tmpResult;
             }
@@ -83,7 +83,7 @@ namespace Server2DataBase
         /// <param name="info">信息</param>
         /// <param name="password">密码</param>
         /// <returns>结果</returns>
-        public Result CheckUserInfo(UserInfo info, string password)
+        public IResult CheckUserInfo(UserInfo info, string password)
         {
             if (IsExist(info, password))
                 return new Result(baseResult.Successful, "验证成功");
@@ -122,7 +122,7 @@ namespace Server2DataBase
         /// <param name="url">数据库地址</param>
         /// <param name="database">数据库名称</param>
         /// <returns>链接结果</returns>
-        public Result ConnectDatabase(string user, string password, string url, string database)
+        public IResult ConnectDatabase(string user, string password, string url, string database)
         {
             try
             {
@@ -150,7 +150,7 @@ namespace Server2DataBase
         /// <param name="sql">结构化查询语句</param>
         /// <param name="tableTitle">结果标题</param>
         /// <returns>执行结果</returns>
-        public Result ExecuteStructuredQueryLanguage(string sql, string tableTitle)
+        public IResult ExecuteStructuredQueryLanguage(string sql, string tableTitle)
         {
             if (!init)
                 return new Result(baseResult.Faild, "未连接数据库");

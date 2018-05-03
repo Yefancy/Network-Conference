@@ -8,25 +8,59 @@ using System.Threading.Tasks;
 
 namespace NCLib
 {
+    public interface IResult
+    {
+        /// <summary>
+        /// 基本结果(只读)
+        /// </summary>
+        baseResult BaseResult
+        {
+            get;
+        }
+        /// <summary>
+        /// 结果信息(只读)
+        /// </summary>
+        string Info
+        {
+            get;
+        }
+    }
+
     /// <summary>
     /// Client对OMCS.DLL的调用接口
     /// </summary>
     public interface IClientCallOMCS
     {
         /// <summary>
+        /// 登录请求
+        /// </summary>
+        /// <param name="id">账号</param>
+        /// <param name="password">密码</param>
+        /// <returns>结果</returns>
+        IResult Login(string id, string password);
+        /// <summary>
+        /// 异步登录请求
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="password"></param>
+        /// <param name="callBack"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        IAsyncResult BeginLogin(string id, string password, AsyncCallback callback, object state);
+        /// <summary>
         /// 创建一个会议室房间
         /// </summary>
         /// <param name="roomId">房间ID</param>
         /// <param name="password">房间密码</param>
         /// <returns></returns>
-        Result CreateNCRoom(string roomId, string password = null);
+        IResult CreateNCRoom(string roomId, string password = null);
         /// <summary>
         /// 加入一个会议室房间
         /// </summary>
         /// <param name="roomId">房间ID</param>
         /// <param name="password">房间密码</param>
         /// <returns></returns>
-        Result JoinNCRoom(string roomId, string password = null);
+        IResult JoinNCRoom(string roomId, string password = null);
         /// <summary>
         /// 退出一个会议室房间
         /// </summary>
@@ -38,89 +72,38 @@ namespace NCLib
         /// <param name="serverPort">端口</param>
         void ConnectOMCS(string serverIP, int serverPort);
         /// <summary>
+        /// 异步连接OMCS服务端
+        /// </summary>
+        /// <param name="serverIP">本地IP</param>
+        /// <param name="serverPort">端口</param>
+        IAsyncResult BeginConnectOMCS(string serverIP, int serverPort, AsyncCallback callback, object state);
+        /// <summary>
         /// 对某人静音
         /// </summary>
         /// <param name="guestId">来访者ID</param>
-        void MuteToUser(string guestId);
+        IResult MuteToUser(string guestId);
     }
 
     /// <summary>
-    /// 服务端业务逻辑接口
+    /// 服务端接口
     /// </summary>
-    public interface IServerLogic
+    public interface IServer
     {
         /// <summary>
-        /// 处理登陆请求
+        /// 服务器状态
         /// </summary>
-        /// <param name="userInfo">用户信息</param>
-        /// <param name="password">登录密码</param>
-        /// <returns>处理结果</returns>
-        Result LoginRequest(UserInfo userInfo, string password);
+        ServerState IsInit
+        {
+            get;
+        }
         /// <summary>
-        /// 处理注册请求
+        /// 初始化
         /// </summary>
-        /// <param name="userInfo">用户信息</param>
-        /// <param name="password">注册密码</param>
-        /// <returns>处理结果</returns>
-        Result RegisterRequest(UserInfo userInfo, string password);
+        void Init();
         /// <summary>
-        /// 处理添加好友请求
+        /// 关闭服务器
         /// </summary>
-        /// <param name="userInfo">用户信息</param>
-        /// <param name="friendId">好友Id</param>
-        /// <returns>处理结果</returns>
-        //Result AddFriendRequest(ClientUser userInfo, string friendId);
-        /// <summary>
-        /// 处理删除好友请求
-        /// </summary>
-        /// <param name="userInfo">用户信息</param>
-        /// <param name="friendId">好友ID</param>
-        /// <returns>处理结果</returns>
-        //Result DeleteFriendRequest(ClientUser userInfo, string friendId);
-        /// <summary>
-        /// 处理创建答疑室请求
-        /// </summary>
-        /// <param name="userInfo">用户信息</param>
-        /// <returns>处理结果</returns>
-        Result CreateRoomRequest(ClientUser userInfo);
-        /// <summary>
-        /// 处理加入答疑室请求
-        /// </summary>
-        /// <param name="userInfo">用户信息</param>
-        /// <param name="roomId">房间ID</param>
-        /// <param name="password">密码</param>
-        /// <returns>处理结果</returns>
-        Result JoinRoomRequest(ClientUser userInfo, string roomId, string password = null);
-        /// <summary>
-        /// 处理邀请好友请求
-        /// </summary>
-        /// <param name="userInfo">用户信息</param>
-        /// <param name="friendId">好友ID</param>
-        /// <param name="roomId">房间ID</param>
-        /// <returns>处理结果</returns>
-        //Result InviteFriendRequest(ClientUser userInfo, string friendId, string roomId);
-        /// <summary>
-        /// 设置某人语音权限请求
-        /// </summary>
-        /// <param name="userInfo">用户信息</param>
-        /// <param name="friendId">好友ID</param>
-        /// <param name="roomId">房间ID</param>
-        /// /// <param name="mute">是否静音</param>
-        /// <returns></returns>
-        Result MuteToUserRequest(ClientUser userInfo, string friendId, string roomId, bool mute);
-        /// <summary>
-        /// 处理获取答疑室用户表请求
-        /// </summary>
-        /// <param name="userInfo">用户信息</param>
-        /// <param name="roomId">房间ID</param>
-        /// <returns>处理结果</returns>
-        Result GetUserListInRoomRequest(ClientUser userInfo, string roomId);
-        /// <summary>
-        /// 处理获取好友列表请求
-        /// </summary>
-        /// <param name="userInfo">用户信息</param>
-        /// <returns>处理结果</returns>
-        //Result GetFriendsListInRoomRequest(ClientUser userInfo);
+        void Close();
     }
 
     /// <summary>
@@ -143,7 +126,7 @@ namespace NCLib
         /// <param name="url">数据库地址</param>
         /// <param name="database">数据库名称</param>
         /// <returns>链接结果</returns>
-        Result ConnectDatabase(string user, string password, string url, string database);
+        IResult ConnectDatabase(string user, string password, string url, string database);
         /// <summary>
         /// 断开数据库连接
         /// </summary>
@@ -155,14 +138,14 @@ namespace NCLib
         /// <param name="userId">用户ID</param>
         /// <param name="password">密码</param>
         /// <returns>处理结果</returns>
-        Result AddUser(UserInfo info, string password);
+        IResult AddUser(UserInfo info, string password);
         /// <summary>
         /// 验证用户信息
         /// </summary>
         /// <param name="info">信息</param>
         /// <param name="password">密码</param>
         /// <returns>结果</returns>
-        Result CheckUserInfo(UserInfo info, string password);
+        IResult CheckUserInfo(UserInfo info, string password);
         /// <summary>
         /// 是否特权用户
         /// </summary>
@@ -180,7 +163,7 @@ namespace NCLib
         /// <param name="userId">用户ID</param>
         /// <param name="friendId">好友ID</param>
         /// <returns>调用结果</returns>
-        //Result AddFriend(string userId, string friendId);
+        //IResult AddFriend(string userId, string friendId);
         /// <summary>
         /// 删除关联好友
         /// </summary>
@@ -192,14 +175,14 @@ namespace NCLib
         /// </summary>
         /// <param name="userId">用户ID</param>
         /// <returns>处理结果</returns>
-        //Result GetUserFriends(string userId);
+        //IResult GetUserFriends(string userId);
         /// <summary>
         /// 执行SQL结构化查询语句
         /// </summary>
         /// <param name="sql">结构化查询语句</param>
         /// <param name="tableTitle">结果标题</param>
         /// <returns>执行结果</returns>
-        Result ExecuteStructuredQueryLanguage(string sql, string tableTitle);
+        IResult ExecuteStructuredQueryLanguage(string sql, string tableTitle);
     }
 
     /// <summary>
@@ -215,7 +198,7 @@ namespace NCLib
         /// /// <param name="listen">监听数目(server) 本地端口(Client)</param>
         /// <param name="AccessAction">回调函数</param>
         /// <returns>处理结果</returns>
-        Result Access(string IP, int port, int listen_or_port, Action<string> callBack = null);
+        IResult Access(string IP, int port, int listen_or_port, Action<string> callBack = null);
         /// <summary>
         /// 释放连接Socket
         /// </summary>
@@ -226,7 +209,7 @@ namespace NCLib
         /// </summary>
         /// <param name="info">信息</param>
         /// <returns>识别结果</returns>
-        Result RecognizeInfo(byte info);
+        IResult RecognizeInfo(byte info);
     }
 
     /// <summary>
@@ -254,6 +237,10 @@ namespace NCLib
     /// </summary>
     public interface IServerSocket : ISocketAPI
     {
+        /// <summary>
+        /// 客户端断线事件
+        /// </summary>
+        event Action<string> OnClientOffline;
 
         /// <summary>
         /// 异步发送响应(Server)
@@ -268,10 +255,6 @@ namespace NCLib
         /// <param name="callBack">回调函数</param>
         /// <returns>处理结果</returns>
         void Receive(string remoteEndPoint, ReceiveCallBack callBack = null);
-        /// <summary>
-        /// 客户端断线事件
-        /// </summary>
-        event Action<string> OnClientOffline;
     }
 
     /// <summary>

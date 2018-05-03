@@ -8,3 +8,9 @@ G:\C#example\NetworkConference\ClientTest\bin\Debug\NCLib.pdb
 G:\C#example\NetworkConference\ClientTest\obj\Debug\ClientTest.csprojResolveAssemblyReference.cache
 G:\C#example\NetworkConference\ClientTest\obj\Debug\ClientTest.exe
 G:\C#example\NetworkConference\ClientTest\obj\Debug\ClientTest.pdb
+G:\C#example\NetworkConference\ClientTest\bin\Debug\Client.dll
+G:\C#example\NetworkConference\ClientTest\bin\Debug\OMCS.dll
+G:\C#example\NetworkConference\ClientTest\bin\Debug\ESBasic.dll
+G:\C#example\NetworkConference\ClientTest\bin\Debug\Client.pdb
+G:\C#example\NetworkConference\ClientTest\bin\Debug\OMCS.xml
+G:\C#example\NetworkConference\ClientTest\bin\Debug\ESBasic.xml

@@ -22,7 +22,7 @@ namespace Client2Server
         /// <param name="port">端口</param>
         /// <param name="callBack">回调函数</param>
         /// <returns>结果</returns>
-        public abstract Result Access(string IP, int port, int listen_or_port, Action<string> callBack = null);
+        public abstract IResult Access(string IP, int port, int listen_or_port, Action<string> callBack = null);
 
         /// <summary>
         /// 释放socket资源
@@ -33,7 +33,7 @@ namespace Client2Server
             communicateSocket.Close();
         }
 
-        public Result RecognizeInfo(byte info)
+        public IResult RecognizeInfo(byte info)
         {
             throw new NotImplementedException();
         }
