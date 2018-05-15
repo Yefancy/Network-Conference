@@ -1,0 +1,4 @@
+G:\C#example\NetworkConference\NCLib\bin\Release\NCLib.dll
+G:\C#example\NetworkConference\NCLib\bin\Release\NCLib.pdb
+G:\C#example\NetworkConference\NCLib\obj\Release\NCLib.dll
+G:\C#example\NetworkConference\NCLib\obj\Release\NCLib.pdb

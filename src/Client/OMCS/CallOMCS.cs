@@ -13,24 +13,16 @@ namespace Client
     /// <summary>
     /// 接入OMCS
     /// </summary>
-    public abstract class CallOMCS: IDisposable
+    public abstract class CallOMCS : IDisposable
     {
         /// <summary>
         /// 设备管理器
         /// </summary>
         protected IMultimediaManager multimediaManager;
         /// <summary>
-        /// 聊天组容器 负责语音传输
+        /// 聊天组容器
         /// </summary>
         protected ChatContainer chatContainer;
-        /// <summary>
-        /// 摄像头连接器
-        /// </summary>
-        protected DynamicCameraConnector CameraConnector;
-        /// <summary>
-        /// 白板连接器（控件）
-        /// </summary>
-        public WhiteBoardConnector WhiteBoardControl;
 
         #region 事件集
         /// <summary>
@@ -44,29 +36,11 @@ namespace Client
         /// <summary>
         /// 语音组离开事件传递
         /// </summary>
-        public event Action<string> SomeoneExit;
-        #endregion
-
-        #region 事件监听
-        /// <summary>
-        /// 连接结束事件
-        /// </summary>
-        /// <param name="result"></param>
-        private void OnConnectEnded(ConnectResult result)
-        {
-            if (result == ConnectResult.Succeed)
-                ConnectEnded?.Invoke(new Result(baseResult.Successful));
-            else
-                ConnectEnded?.Invoke(new Result(baseResult.Faild, result.ToString()));
-        }
+        public event Action<ChatMember> SomeoneExit;
         #endregion
 
         public CallOMCS()
         {
-            CameraConnector = new DynamicCameraConnector();
-            CameraConnector.ConnectEnded += OnConnectEnded;
-            WhiteBoardControl = new WhiteBoardConnector();
-            WhiteBoardControl.ConnectEnded += OnConnectEnded;
             multimediaManager = MultimediaManagerFactory.GetSingleton();
             multimediaManager.ChannelMode = ChannelMode.P2PDisabled;
             multimediaManager.SecurityLogEnabled = false;
@@ -87,10 +61,15 @@ namespace Client
         /// </summary>
         public virtual void Dispose()
         {
-            chatContainer.Close();
-            CameraConnector.Dispose();
-            //WhiteBoardControl.Dispose();
-            multimediaManager.Dispose();
+            try
+            {
+                chatContainer.Close();                
+                multimediaManager.Dispose();
+            }
+            catch(Exception e)
+            {
+                throw e;
+            }
         }
         #endregion
 
@@ -99,8 +78,9 @@ namespace Client
         /// </summary>
         protected void BindingEvent()
         {
-            chatContainer.SomeoneJoin += SomeoneJoin;//传递事件
-            chatContainer.SomeoneExit += SomeoneExit;
+            chatContainer.UserJoin += a => { SomeoneJoin?.Invoke(a); };
+            chatContainer.UserExit += a => { SomeoneExit?.Invoke(a); };
+            chatContainer.ConnectEnded += a => { ConnectEnded?.Invoke(a); };
         }
 
         /// <summary>
@@ -111,22 +91,19 @@ namespace Client
         public void JoinRoom(string roomID, string teacherID)
         {
             if (chatContainer == null)
-                throw new Exception("未初始化CallOMCS类实例");    
-            ExitRoom(); //离开上一个答疑室
-            chatContainer.JoinChatGroup(roomID);
-            CameraConnector.BeginConnect(teacherID);
-            WhiteBoardControl.BeginConnect(roomID);
+            {
+                throw new Exception("未初始化CallOMCS类实例");
+            }
+            ExitRoom(); //离开上一个答疑室           
+            chatContainer.JoinChatGroup(roomID, teacherID);
+            chatContainer.IsWhiteBoardWatchingOnly = true;
         }
 
         /// <summary>
         /// 离开答疑室
         /// </summary>
         public void ExitRoom()
-        {
-            if (CameraConnector.Connected)
-                CameraConnector.Disconnect();
-            if (WhiteBoardControl.Connected)
-                WhiteBoardControl.Disconnect();
+        {            
             if (chatContainer != null)
                 chatContainer.Close();
             multimediaManager.OutputVideo = false;
@@ -139,7 +116,7 @@ namespace Client
         /// <param name="isMute"></param>
         public void Mute(bool isMute)
         {
-            multimediaManager.OutputAudio = isMute;
+            multimediaManager.OutputAudio = !isMute;
         }
 
     }

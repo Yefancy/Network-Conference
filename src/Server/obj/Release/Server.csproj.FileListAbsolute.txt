@@ -1,0 +1,12 @@
+G:\C#example\NetworkConference\Server\bin\Release\Server.exe.config
+G:\C#example\NetworkConference\Server\bin\Release\Server.exe
+G:\C#example\NetworkConference\Server\bin\Release\Server.pdb
+G:\C#example\NetworkConference\Server\bin\Release\Client2Server.dll
+G:\C#example\NetworkConference\Server\bin\Release\NCLib.dll
+G:\C#example\NetworkConference\Server\bin\Release\Server2DataBase.dll
+G:\C#example\NetworkConference\Server\bin\Release\Client2Server.pdb
+G:\C#example\NetworkConference\Server\bin\Release\NCLib.pdb
+G:\C#example\NetworkConference\Server\bin\Release\Server2DataBase.pdb
+G:\C#example\NetworkConference\Server\obj\Release\Server.csprojResolveAssemblyReference.cache
+G:\C#example\NetworkConference\Server\obj\Release\Server.exe
+G:\C#example\NetworkConference\Server\obj\Release\Server.pdb

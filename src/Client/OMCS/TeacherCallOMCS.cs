@@ -21,24 +21,21 @@ namespace Client.OMCS
         {
             multimediaManager.CameraVideoSize = new System.Drawing.Size(320, 240);
             multimediaManager.AutoAdjustCameraEncodeQuality = true;
-            multimediaManager.CameraDeviceIndex = 0;
+            multimediaManager.CameraDeviceIndex = 0;            
             multimediaManager.Initialize(id, password, IP, port);
+            multimediaManager.OutputVideo = false;
+            multimediaManager.OutputAudio = false;
             chatContainer = new ChatContainer(multimediaManager);
             BindingEvent();
         }
 
-        public void createRoom(string roomID)
+        public void createRoom(string roomID,string teacherID)
         {
-            if (chatContainer == null)
-                throw new Exception("未初始化CallOMCS类实例");
-            if (CameraConnector.Connected)
-                CameraConnector.Disconnect();
-            if (WhiteBoardControl.Connected)
-                WhiteBoardControl.Disconnect();
+            ExitRoom();
             multimediaManager.OutputVideo = true;
             multimediaManager.OutputAudio = true;
-            chatContainer.JoinChatGroup(roomID);
-            WhiteBoardControl.BeginConnect(roomID);
+            chatContainer.JoinChatGroup(roomID, teacherID);
+            chatContainer.IsWhiteBoardWatchingOnly = false;
         }
     }
 }

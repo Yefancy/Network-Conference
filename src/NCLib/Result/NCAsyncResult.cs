@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace NCLib
 {
+    /// <summary>
+    /// 异步操作结果
+    /// </summary>
     public class NCAsyncResult : IAsyncResult,IResult
     {
         private AsyncCallback _asyncCallback;

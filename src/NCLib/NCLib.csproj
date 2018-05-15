@@ -40,9 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AOP\AOPAttribute.cs" />
+    <Compile Include="AOP\AOPHandler.cs" />
+    <Compile Include="NCList.cs" />
     <Compile Include="Result\NCAsyncResult.cs" />
     <Compile Include="NCEnum.cs" />
-    <Compile Include="User.cs" />
+    <Compile Include="Users.cs" />
     <Compile Include="Interface.cs" />
     <Compile Include="Result\Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -14,8 +14,15 @@ namespace Client2Server
         /// TKey:网络结点号
         /// TValue:套接字
         /// </summary>
-        public Dictionary<string, Socket> clientConnections = new Dictionary<string, Socket>();
+        private Dictionary<string, Socket> clientConnections = new Dictionary<string, Socket>();
+        /// <summary>
+        /// socket断开 掉线事件
+        /// </summary>
         public event Action<string> OnClientOffline;
+        /// <summary>
+        /// 抛出异常事件
+        /// </summary>
+        public event Action<Exception> OnException;
 
         /// <summary>
         /// 重写服务端Access函数
@@ -123,13 +130,20 @@ namespace Client2Server
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine(e.Message);
                         //对于连接断开的异常 移除维持的Socket
-                        clientConnections.Remove(remoteEndPoint);
-                        cSocket.Close();
-                        if (OnClientOffline != null)
-                            OnClientOffline(remoteEndPoint);
-                        Console.WriteLine("释放与" + remoteEndPoint + "的连接资源");
+                        if(e is SocketException)
+                        {
+                            clientConnections.Remove(remoteEndPoint);
+                            cSocket.Close();
+                            OnClientOffline?.Invoke(remoteEndPoint);
+                        }
+                        else//对于其他的异常 移除维持的Socket并触发异常事件
+                        {
+                            OnException?.Invoke(e);
+                            clientConnections.Remove(remoteEndPoint);
+                            cSocket.Close();
+                            OnClientOffline?.Invoke(remoteEndPoint);
+                        }                                            
                     }
                 }, null);
         }

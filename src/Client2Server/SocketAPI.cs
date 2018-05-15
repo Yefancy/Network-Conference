@@ -30,7 +30,15 @@ namespace Client2Server
         /// <param name="key"></param>
         public void DisposeSocket(string key)
         {
-            communicateSocket.Close();
+            try
+            {
+                if (communicateSocket != null)
+                    communicateSocket.Close();
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
         public IResult RecognizeInfo(byte info)

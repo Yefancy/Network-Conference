@@ -47,7 +47,12 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
+    <Compile Include="ServerData\ChatRoom.cs" />
+    <Compile Include="ServerData\ReceiveInfo.cs" />
+    <Compile Include="ServerData\RunningData.cs" />
+    <Compile Include="ServerData\SInterface.cs" />
     <Compile Include="Terminal.cs" />
+    <Compile Include="User_Server.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

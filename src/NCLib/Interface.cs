@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net.Sockets;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace NCLib
 {
+    /// <summary>
+    /// 结果类接口
+    /// </summary>
     public interface IResult
     {
         /// <summary>
@@ -27,9 +31,9 @@ namespace NCLib
     }
 
     /// <summary>
-    /// Client对OMCS.DLL的调用接口
+    /// Client逻辑的调用接口
     /// </summary>
-    public interface IClientCallOMCS
+    public interface IClientLogic
     {
         /// <summary>
         /// 登录请求
@@ -46,25 +50,43 @@ namespace NCLib
         /// <param name="callBack"></param>
         /// <param name="state"></param>
         /// <returns></returns>
-        IAsyncResult BeginLogin(string id, string password, AsyncCallback callback, object state);
+        IAsyncResult BeginLogin(AsyncCallback callback, string id, string password, object state = null);
         /// <summary>
         /// 创建一个会议室房间
         /// </summary>
         /// <param name="roomId">房间ID</param>
         /// <param name="password">房间密码</param>
         /// <returns></returns>
-        IResult CreateNCRoom(string roomId, string password = null);
+        IResult CreateNCRoom(string roomId, string password = "");
+        /// <summary>
+        /// 异步创建一个会议室房间
+        /// </summary>
+        /// <param name="callback"></param>
+        /// <param name="roomId"></param>
+        /// <param name="password"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
+        IAsyncResult BeginCreateNCRoom(AsyncCallback callback, string roomId, string password = "", object state = null);
         /// <summary>
         /// 加入一个会议室房间
         /// </summary>
         /// <param name="roomId">房间ID</param>
         /// <param name="password">房间密码</param>
         /// <returns></returns>
-        IResult JoinNCRoom(string roomId, string password = null);
+        IResult JoinNCRoom(string roomId, string password = "");
         /// <summary>
-        /// 退出一个会议室房间
+        /// 异步加入一个会议室房间
         /// </summary>
-        void CloseNCRoom();
+        /// <param name="roomId">房间ID</param>
+        /// <param name="password">房间密码</param>
+        /// <returns></returns>
+        IAsyncResult BeginJoinNCRoom(AsyncCallback callback, string roomId, string password = "", object state = null);
+        /// <summary>
+        /// 离开一个会议室房间
+        /// </summary>
+        /// <param name="roomId"></param>
+        /// <returns></returns>
+        IResult ExitNCRoom(string roomId);
         /// <summary>
         /// 连接OMCS服务端
         /// </summary>
@@ -76,12 +98,12 @@ namespace NCLib
         /// </summary>
         /// <param name="serverIP">本地IP</param>
         /// <param name="serverPort">端口</param>
-        IAsyncResult BeginConnectOMCS(string serverIP, int serverPort, AsyncCallback callback, object state);
+        IAsyncResult BeginConnectOMCS(AsyncCallback callback, string serverIP, int serverPort, object state = null);
         /// <summary>
-        /// 对某人静音
+        /// 指示某人静音
         /// </summary>
         /// <param name="guestId">来访者ID</param>
-        IResult MuteToUser(string guestId);
+        IResult MuteUser(string roomid, string guestId);
     }
 
     /// <summary>
@@ -241,6 +263,10 @@ namespace NCLib
         /// 客户端断线事件
         /// </summary>
         event Action<string> OnClientOffline;
+        /// <summary>
+        /// 触发异常事件
+        /// </summary>
+        event Action<Exception> OnException;
 
         /// <summary>
         /// 异步发送响应(Server)
@@ -263,4 +289,11 @@ namespace NCLib
     /// <param name="remoteEndPoint">请求的节点</param>
     /// <param name="info">请求信息</param>
     public delegate void ReceiveCallBack(string remoteEndPoint, string info);
+
+    /// <summary>
+    /// AOP方法函数
+    /// </summary>
+    /// <param name="msg"></param>
+    /// <param name="minfo"></param>
+    public delegate void AOPMethodHandler(IMessage msg, string minfo);
 }

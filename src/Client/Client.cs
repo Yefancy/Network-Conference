@@ -13,12 +13,10 @@ namespace Client
     /// <summary>
     /// 客户端
     /// </summary>
-    public class Client : IClientCallOMCS
+    public class Client : IClientLogic
     {
         private IClientSocket clientSocket;
         private CallOMCS callOMCS;
-        private string serverIP;
-        private int serverPort, localPort;
         /// <summary>
         /// 等待接受响应结果
         /// </summary>
@@ -31,7 +29,7 @@ namespace Client
         /// 响应结果
         /// </summary>
         private Dictionary<string, string> respondMessage;
-        public ClientUser UserInfo;
+        public User_Client UserInfo;
 
         #region 事件集
         /// <summary>
@@ -45,20 +43,17 @@ namespace Client
         /// <summary>
         /// 语音组离开事件传递
         /// </summary>
-        public event Action<string> SomeoneExit;
+        public event Action<ChatMember> SomeoneExit;
         #endregion
 
-        public Client(string serverIP, int serverPort, int localPort)
+        public Client()
         {
             clientSocket = new ClientSocket();
-            UserInfo = new ClientUser();
+            UserInfo = new User_Client();
             LOCK = new object();
-            this.serverIP = serverIP;
-            this.serverPort = serverPort;
-            this.localPort = localPort;
         }
 
-        public void Init()
+        public void Init(string serverIP, int serverPort, int localPort)
         {
             clientSocket.Access(serverIP, serverPort, localPort, Accept);
         }
@@ -68,24 +63,24 @@ namespace Client
         {
             lock (LOCK)
             {
-                this.UserInfo = new ClientUser(id);
+                this.UserInfo = new User_Client(id);
                 if (waitingRespond) { throw new Exception("产生过未上锁的异步请求"); }
                 this.waitingRespond = true;
                 clientSocket.Send(MessageTranslate.EncapsulationInfo(MessageContent.登录, MessageType.请求, id, password));
                 while (waitingRespond) { }//等待响应
-                if(respondMessage["验证结果"] == baseResult.Successful.ToString())
+                if (respondMessage["结果"] == baseResult.Successful.ToString())
                 {
                     this.UserInfo.UserState = UserState.已登录;
                     UserInfo.IsPrerogative = Boolean.Parse(respondMessage["权限"]);
                     return new Result(baseResult.Successful, respondMessage["权限"]);
                 }
                 return new Result(baseResult.Faild, respondMessage["权限"]);
-            }           
+            }
         }
-        public IAsyncResult BeginLogin(string id, string password, AsyncCallback callback, object state = null)
+        public IAsyncResult BeginLogin(AsyncCallback callback, string id, string password, object state = null)
         {
             var asyncResult = new NCAsyncResult(callback, state);
-            var thr = new Thread(() => 
+            var thr = new Thread(() =>
             {
                 asyncResult.SetCompleted(Login(id, password));
             });
@@ -94,25 +89,21 @@ namespace Client
             return asyncResult;
         }
 
-        public void CloseNCRoom()
-        {
-            throw new NotImplementedException();
-        }
-
         public void ConnectOMCS(string serverIP, int serverPort)
         {
-            if(UserInfo.UserState == UserState.未登录) { throw new Exception("未登录用户申请初始化"); }
+            if (UserInfo.UserState == UserState.未登录) { throw new Exception("未登录用户申请初始化"); }
             if (callOMCS != null)//登录成功 实例CallOMCS
                 callOMCS.Dispose();
             if (UserInfo.IsPrerogative)
                 callOMCS = new TeacherCallOMCS();
-            callOMCS = new StudentCallOMCS();
+            else
+                callOMCS = new StudentCallOMCS();
             callOMCS.Initialize(UserInfo.UserId, "", serverIP, serverPort);
-            callOMCS.ConnectEnded += ConnectEnded;
-            callOMCS.SomeoneExit += SomeoneExit;
-            callOMCS.SomeoneJoin += SomeoneJoin;
+            callOMCS.ConnectEnded += a => { ConnectEnded?.Invoke(a); };
+            callOMCS.SomeoneExit += a => { SomeoneExit?.Invoke(a); };
+            callOMCS.SomeoneJoin += a => { SomeoneJoin?.Invoke(a); };
         }
-        public IAsyncResult BeginConnectOMCS(string serverIP, int serverPort, AsyncCallback callback, object state)
+        public IAsyncResult BeginConnectOMCS(AsyncCallback callback, string serverIP, int serverPort, object state = null)
         {
             var asyncResult = new NCAsyncResult(callback, state);
             var thr = new Thread(() =>
@@ -122,9 +113,9 @@ namespace Client
                     ConnectOMCS(serverIP, serverPort);
                     asyncResult.SetCompleted(baseResult.Successful);
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
-                    asyncResult.SetCompleted(baseResult.Faild,e.Message);
+                    asyncResult.SetCompleted(baseResult.Faild, e.Message);
                 }
             });
             thr.IsBackground = true;
@@ -132,21 +123,85 @@ namespace Client
             return asyncResult;
         }
 
-        public IResult CreateNCRoom(string roomId, string password = null)
+        public IResult CreateNCRoom(string roomId, string password = "")
         {
-            throw new NotImplementedException();
+            lock (LOCK)
+            {
+                if (waitingRespond) { throw new Exception("产生过未上锁的异步请求"); }
+                this.waitingRespond = true;
+                clientSocket.Send(MessageTranslate.EncapsulationInfo(MessageContent.创建答疑室, MessageType.请求, roomId, password));
+                while (waitingRespond) { }//等待响应
+                if (respondMessage["结果"] == baseResult.Successful.ToString())
+                {
+                    ((TeacherCallOMCS)callOMCS).createRoom(roomId, UserInfo.UserId);
+                    return new Result(baseResult.Successful, respondMessage["描述"]);
+                }
+                return new Result(baseResult.Faild, respondMessage["描述"]);
+            }
+        }
+        public IAsyncResult BeginCreateNCRoom(AsyncCallback callback, string roomId, string password = "", object state = null)
+        {
+            var asyncResult = new NCAsyncResult(callback, state);
+            var thr = new Thread(() =>
+            {
+                asyncResult.SetCompleted(CreateNCRoom(roomId, password));
+            });
+            thr.IsBackground = true;
+            thr.Start();
+            return asyncResult;
         }
 
-        public IResult JoinNCRoom(string roomId, string password = null)
+        public IResult JoinNCRoom(string roomId, string password = "")
         {
-            throw new NotImplementedException();
+            lock (LOCK)
+            {
+                if (waitingRespond) { throw new Exception("产生过未上锁的异步请求"); }
+                this.waitingRespond = true;
+                clientSocket.Send(MessageTranslate.EncapsulationInfo(MessageContent.加入答疑室, MessageType.请求, roomId, password));
+                while (waitingRespond) { }//等待响应
+                if (respondMessage["结果"] == baseResult.Successful.ToString())
+                {
+                    callOMCS.JoinRoom(roomId, respondMessage["创建者"]);
+                    return new Result(baseResult.Successful, respondMessage["描述"]);
+                }
+                return new Result(baseResult.Faild, respondMessage["描述"]);
+            }
+        }
+        public IAsyncResult BeginJoinNCRoom(AsyncCallback callback, string roomId, string password = "", object state = null)
+        {
+            var asyncResult = new NCAsyncResult(callback, state);
+            var thr = new Thread(() =>
+            {
+                asyncResult.SetCompleted(JoinNCRoom(roomId, password));
+            });
+            thr.IsBackground = true;
+            thr.Start();
+            return asyncResult;
         }
 
-        public IResult MuteToUser(string guestId)
+        public IResult ExitNCRoom(string roomId)
         {
-            throw new NotImplementedException();
+            clientSocket.Send(MessageTranslate.EncapsulationInfo(MessageContent.退出答疑室, MessageType.通知, roomId));
+            callOMCS.ExitRoom();
+            return new Result(baseResult.Successful);
+        }
+
+        public IResult MuteUser(string roomid, string guestId)
+        {
+            if (UserInfo.IsPrerogative == false)
+                return new Result(baseResult.Faild, "没有权限");
+            clientSocket.Send(MessageTranslate.EncapsulationInfo(MessageContent.静音某人, MessageType.通知, roomid, guestId));
+            return new Result(baseResult.Successful);
         }
         #endregion
+
+        public void Close()
+        {
+            if (callOMCS != null)
+                callOMCS.Dispose();
+            if (clientSocket != null)
+                clientSocket.DisposeSocket("");
+        }
 
         #region 回调函数
         private void Accept(string remoteEndPoint)
@@ -171,6 +226,16 @@ namespace Client
                         waitingRespond = false;//得到响应 停止等待
                     else
                         throw new Exception("未请求的响应到来");
+                    break;
+                case MessageType.通知://未封装的
+                    if (messageContent == MessageContent.静音自己)
+                    {
+                        callOMCS.Mute(bool.Parse(respondMessage["是否静音"]));
+                    }
+                    else if (messageContent == MessageContent.某人退出答疑室)
+                    {
+                        //
+                    }
                     break;
             }
         }

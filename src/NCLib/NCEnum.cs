@@ -51,6 +51,7 @@ namespace NCLib
         请求,
         响应,
         发送,
+        异常
     }
 
     /// <summary>
@@ -59,7 +60,13 @@ namespace NCLib
     public enum MessageContent
     {
         错误,
-        登录
+        登录,
+        创建答疑室,
+        加入答疑室,
+        退出答疑室,
+        某人退出答疑室,
+        静音某人,
+        静音自己
     }
 
     /// <summary>
@@ -70,7 +77,7 @@ namespace NCLib
         错误,
         请求,
         响应,
-        消息
+        通知
     }
 
     /// <summary>

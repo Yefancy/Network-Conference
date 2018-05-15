@@ -49,7 +49,21 @@ namespace Server
         /// <param name="info"></param>
         public static void ServerPrint(InfoType type, string info)
         {
-            OnNewMessagePrint(String.Format(ServerTitle, type), info, Color.Green);
+            switch (type)
+            {
+                case InfoType.信息:
+                    OnNewMessagePrint(String.Format(ServerTitle, type), info, Color.Green);
+                    break;
+                case InfoType.响应:
+                    OnNewMessagePrint(String.Format(ServerTitle, type), info, Color.RosyBrown);
+                    break;
+                case InfoType.异常:
+                    OnNewMessagePrint(String.Format(ServerTitle, type), info, Color.Red);
+                    break;
+                default:
+                    OnNewMessagePrint(String.Format(ServerTitle, type), info, Color.Green);
+                    break;
+            }
         }
 
         /// <summary>
