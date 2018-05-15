@@ -1,0 +1,29 @@
+2018/5/12 21:45:17 : Current camera [index:-1] is invalid !
+
+2018/5/12 21:48:35 : Current camera [index:-1] is invalid !
+
+2018/5/12 22:04:14 : Current camera [index:-1] is invalid !
+
+2018/5/12 22:13:27 : Current camera [index:-1] is invalid !
+
+2018/5/12 23:01:00 : Current camera [index:-1] is invalid !
+
+
+2018/5/12 23:15:03 : 普通 －－ 未将对象引用设置到对象的实例。 [:]    在 WUbpjgXbe1JdQ2uHBnD.cGb9DMXjDAJ6FVdqOy5.YLcEtnItxqhPNlihqYJQ(Object )
+   在 WUbpjgXbe1JdQ2uHBnD.cGb9DMXjDAJ6FVdqOy5.Dispose()
+   在 vmQr451HvnW9T9hbmCL.pMkoR01d00iWZhAccCF.WpmmYcGRv7Ef6nk8T1B(Object )
+   在 vmQr451HvnW9T9hbmCL.pMkoR01d00iWZhAccCF.Dispose()
+   在 tfEaTGpXyidGLq1EJP6.cnGwM1ph6eYFwlAeyoo.x9I8kcII1Mt1OvDPknZb(Object )
+   在 tfEaTGpXyidGLq1EJP6.cnGwM1ph6eYFwlAeyoo.T0uD55Zg0M()
+   在 q5flpKH9i7ma5WA0AZd.JCVUDpHSlcWInOl9u9a.AwqRKGbkTYe3Ef92A3g(Object )
+   在 q5flpKH9i7ma5WA0AZd.JCVUDpHSlcWInOl9u9a.FAk5HwLv5Kc()
+   在 NpNOUWdv1OHx1NBnEeh.RyA8E2dak4NeQb4p3EM.layyT2FlZlEWruWG29y(Object )
+   在 NpNOUWdv1OHx1NBnEeh.RyA8E2dak4NeQb4p3EM.Wl8JayC3BJ()
+   在 ESBasic.Helpers.EventHelper.SpringEventSafely(IAgileLogger agileLogger, String eventPath, Delegate theEvent) 。错误类型:System.NullReferenceException。位置：NpNOUWdv1OHx1NBnEeh.RyA8E2dak4NeQb4p3EM.Wl8JayC3BJ() On handle event [OMCS.Engine.Tcp.Passive.TcpEngine.ConnectionInterrupted].
+
+2018/5/12 23:28:36 : Current camera [index:-1] is invalid !
+
+2018/5/12 23:47:52 : Current camera [index:-1] is invalid !
+
+2018/5/12 23:52:15 : Current camera [index:-1] is invalid !
+
