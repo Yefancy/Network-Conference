@@ -59,8 +59,8 @@ namespace NCLib
         public UserGroup()
         {
             memberList = new NCList<T>();
-            memberList.ItemAdded += UserJoin;
-            memberList.ItemRemoved += UserExit;
+            memberList.ItemAdded += a => { UserJoin?.Invoke(a); };
+            memberList.ItemRemoved += a => { UserExit?.Invoke(a); };
         }
     }  
 }
